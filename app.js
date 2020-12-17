@@ -9,9 +9,12 @@ class Book{
 // UI class: Handles UI Tasks
 class UI{
     static displayBooks(){   
+
         const books = Store.getBooks();
 
-        books.forEach((book) => UI.addBookToList(book));
+        books.forEach(function(book){
+            return UI.addBookToList(book);
+        });
     }
 
     static addBookToList(book){
@@ -65,28 +68,26 @@ class Store{
         }
         return books;
     }
-
     static addBook(book){
         const books = Store.getBooks();
         books.push(book);
 
-        localStorage.setItem("books", JSON.stringify(book));
+        localStorage.setItem("books", JSON.stringify(books));
     }
-
     static removeBook(isbn){
         const books = Store.getBooks();
 
         books.forEach((book, index) => {
             if(book.isbn === isbn){
                 books.splice(index, 1);
+                localStorage.setItem("books", JSON.stringify(books));
             }
         });
 
-        localStorage.setItem("books", JSON.stringify(book));
     }
 }
 // Events: Display books
-document.addEventListener("click", UI.displayBooks);
+document.addEventListener('DOMContentLoaded', UI.displayBooks);
 // Event: Add Books
 document.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -95,21 +96,38 @@ document.addEventListener("submit", (event) => {
     const author = document.querySelector("#author").value;
     const isbn = document.querySelector("#isbn").value;
 
-    const book = new Book(title, author, isbn);
-
     if(title === "" || author === "" || isbn === ""){
         UI.showAlert('Fill in the fields', "danger");
     }else{
+        // Instancing a new object
+        const book = new Book(title, author, isbn);
+
+        // Add book to UI
         UI.addBookToList(book);
+
+        // Add book to store
         Store.addBook(book);
+        
+        // Show success messages
         UI.showAlert("Book added", "success");
+
+        // Clear fields
         UI.clearFields();
     }
    
 })
 // Event: Remove Books
 document.querySelector("#book-list").addEventListener("click", (e) => {  
+   // Remove book from UI
    UI.deleteBook(e.target);
+
+   // Remove book from store
    Store.removeBook(e.target.parentElement.previousElementSibling.textContent);
+
+   // Show success message
    UI.showAlert("Book removed", "success");
+});
+
+document.querySelector("#book-list").addEventListener("click", (e) => {
+    console.log(e.target.parentElement.previousElementSibling.innerText);
 })
