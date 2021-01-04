@@ -10,22 +10,11 @@ class Book{
 class UI{
     static displayBooks(){   
 
-        // const books = Store.getBooks();
+        const books = Store.getBooks();
 
-        // books.forEach(function(book){
-        //     return UI.addBookToList(book);
-        // });
-
-        const books =  [
-            {
-            title: "Atomic", 
-            author: "Chris tylor", 
-            isbn: 			"000987"
-            }
-        ];
-        
-        let storedBooks = books;
-        storedBooks.forEach((book) => UI.addBookToList(book));
+        books.forEach(function(book){
+            return UI.addBookToList(book);
+        });
     }
 
     static addBookToList(book){
@@ -69,34 +58,34 @@ class UI{
     }
 }
 // Store class: Handles storage
-// class Store{
-//     static getBooks(){
-//         let books;
-//         if(localStorage.getItem("books") === null){
-//             books = [];
-//         }else{
-//             books = JSON.parse(localStorage.getItem("books"));
-//         }
-//         return books;
-//     }
-//     static addBook(book){
-//         const books = Store.getBooks();
-//         books.push(book);
+class Store{
+    static getBooks(){
+        let books;
+        if(localStorage.getItem("books") === null){
+            books = [];
+        }else{
+            books = JSON.parse(localStorage.getItem("books"));
+        }
+        return books;
+    }
+    static addBook(book){
+        const books = Store.getBooks();
+        books.push(book);
 
-//         localStorage.setItem("books", JSON.stringify(books));
-//     }
-//     static removeBook(isbn){
-//         const books = Store.getBooks();
+        localStorage.setItem("books", JSON.stringify(books));
+    }
+    static removeBook(isbn){
+        const books = Store.getBooks();
 
-//         books.forEach((book, index) => {
-//             if(book.isbn === isbn){
-//                 books.splice(index, 1);
-//                 localStorage.setItem("books", JSON.stringify(books));
-//             }
-//         });
+        books.forEach((book, index) => {
+            if(book.isbn === isbn){
+                books.splice(index, 1);
+                localStorage.setItem("books", JSON.stringify(books));
+            }
+        });
 
-//     }
-// }
+    }
+}
 // Events: Display books
 document.addEventListener('DOMContentLoaded', UI.displayBooks);
 // Event: Add Books
