@@ -23,7 +23,7 @@ class UI{
             isbn: 			"000987"
             }
         ];
-
+        
         let storedBooks = books;
         storedBooks.forEach((book) => UI.addBookToList(book));
     }
